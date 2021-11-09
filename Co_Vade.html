@@ -5,13 +5,61 @@
 	<title>CO-VADE 시스템</title>
 </head>
 <body>
-	
+	<div id="title">CO_VADE 시스템</div>
+	<div onclick="kakaoLogin();">
+		<a href="javascript:void(0)"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_BFkaTcgykLRf-tEQ_CZ28Vfw6LtB79Ji_Q&usqp=CAU"
+			 style = height:50px;width:auto/>
+		</a>
+	</div>
+	<div onclick="kakaoLogout();">
+		<a href="javascript:void(0)"><img src="Logout.png" style = height:30px;width:auto/>
+		</a>
+	</div>
 	<div id="map" style="width:100%;height:100vh;"></div>
+
+	// 카카오 로그인 스크립트
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<script>
+		Kakao.init('b77f7b6983dfef28e72cdef742180c0f'); //발급받은 키 중 javascript키를 사용해준다.
+		console.log(Kakao.isInitialized()); // sdk초기화여부판단
+		//카카오로그인
+		function kakaoLogin() {
+			Kakao.Auth.login({
+			success: function (response) {
+				Kakao.API.request({
+				url: '/v2/user/me',
+				success: function (response) {
+					console.log(response)
+				},
+				fail: function (error) {
+					console.log(error)
+				},
+				})
+			},
+			fail: function (error) {
+				console.log(error)
+			},
+			})
+		}
+		//카카오로그아웃  
+		function kakaoLogout() {
+			if (Kakao.Auth.getAccessToken()) {
+			Kakao.API.request({
+				url: '/v1/user/unlink',
+				success: function (response) {
+					console.log(response)
+				},
+				fail: function (error) {
+				console.log(error)
+				},
+			})
+			Kakao.Auth.setAccessToken(undefined)
+			}
+		}  
+	</script>
 
 	<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b77f7b6983dfef28e72cdef742180c0f&libraries=services,clusterer,drawing"></script>
 	<script>
-
-
 
 		// 지도 설정 값
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
