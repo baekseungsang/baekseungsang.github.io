@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var time = 1000; //1초(1000) * 60
+        setInterval("autoScript()", time);
+
+        function autoScript() {
+            navigator.geolocation.getCurrentPosition((position) => {
+                let latitude = position.coords.latitude;
+                let longitude = position.coords.longitude;
+
+                let today = new Date();   
+
+                let hours = today.getHours(); // 시
+                let minutes = today.getMinutes();  // 분
+                let seconds = today.getSeconds();  // 초
+                let milliseconds = today.getMilliseconds(); // 밀리초
+
+                console.log(hours + ':' + minutes + ':' + seconds + ':' + milliseconds);
+                console.log('latitude',latitude);
+                console.log('longitude',longitude);
+            },(err) => {
+                
+            });
+        }
+    </script>
+</body>
+</html>
