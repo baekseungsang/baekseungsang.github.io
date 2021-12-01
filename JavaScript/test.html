@@ -201,7 +201,8 @@
 		}
 
 		
-
+		var linePath = [];
+		var markers = [];
 		var time = 10000; //1초(1000) * 60
         setInterval("autoScript()", time);
 
@@ -219,7 +220,6 @@
 
 
 				// 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
-				var linePath = [];
 
 				linePath.push(new kakao.maps.LatLng(latitude, longitude));
 
@@ -232,7 +232,6 @@
 					strokeStyle: 'solid' // 선의 스타일입니다
 				});
 
-				var markers = [];
 
 				var imageSrc = "ex.png", // 마커이미지의 주소입니다    
 				imageSize = new kakao.maps.Size(7, 7), // 마커이미지의 크기입니다
