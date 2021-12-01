@@ -66,7 +66,7 @@
 		// 지도 설정 값
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 		    mapOption = {
-		        center: new kakao.maps.LatLng(37.262136808290435, 127.0412112365976), // 지도의 중심좌표
+		        center: new kakao.maps.LatLng(36.77380607279762, 126.92017420161166), // 지도의 중심좌표
 		        level: 3, // 지도의 확대 레벨
 		        mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도종류
 		    }; 
@@ -202,135 +202,6 @@
 
 		
 
-		// 지도에 확진자 동선 표시
-		// 사용자 이동 데이터(좌표,시간)
-		var gpsdata = [
-			[37.262474090087416, 127.04188715342302,"10:50"],
-			[37.26258509389554, 127.04194079759993,"10:51"],
-			[37.26264486510906, 127.04185496691689,"10:52"],
-			[37.262627787624325, 127.04169403438617,"10:53"],
-			[37.262499706365354, 127.04164039020927,"10:54"],
-			[37.26237162488855, 127.0415652883616,"10:55"],
-			[37.262422857505406, 127.04140435583088,"10:56"],
-			[37.26243993503662, 127.04125415213556,"10:57"],
-			[37.262482628847685, 127.04117905028788,"10:58"],
-			[37.262482628847685, 127.04116832145252,"10:59"],
-			[37.26250824512272, 127.0411146772756,"11:00"],
-			[37.26260217138997, 127.04083572755567,"11:01"],
-			[37.262636326367186, 127.04068552386036,"11:02"],
-			[37.26261071013571, 127.0405996931773,"11:03"],
-			[37.26249116760702, 127.04055677783579,"11:04"],
-			[37.26237162488855, 127.04049240482348,"11:05"],
-			[37.26237162488855, 127.04034220112817,"11:06"],
-			[37.26243993503662, 127.04019199743281,"11:07"],
-			[37.26243993503662, 127.04000960723134,"11:08"],
-			[37.26249116760702, 127.03989159004215,"11:09"],
-			[37.26249116760702, 127.03980575935911,"11:10"],
-			[37.26252532263456, 127.03974138634682,"11:11"],
-			[37.26256801639724, 127.03959118265146,"11:12"],
-			[37.262636326367186, 127.03948389429765,"11:13"],
-			[37.26266194258993, 127.03940879245,"11:14"],
-			[37.26269609754005, 127.03933369060233,"11:15"],
-			[37.262713175009296, 127.03922640224852,"11:16"],
-			[37.262764407393824, 127.0390761985532,"11:17"],
-			[37.26281563974349, 127.03886162184558,"11:18"],
-			[37.262883949488824, 127.03868996047947,"11:19"],
-			[37.262994883059946, 127.03805699683464,"11:20"],
-			[37.26308027002872, 127.03774586060861,"11:21"],
-			[37.2631229634768, 127.03761711458402,"11:22"],
-			[37.26319127294339, 127.03730597835798,"11:23"],
-			[37.26326812101926, 127.03715577466265,"11:24"],
-			[37.26327665968951, 127.0369519267904,"11:25"],
-			[37.263327891690686, 127.03682318076582,"11:26"],
-			[37.26343035558856, 127.03663006172896,"11:27"],
-			[37.26347304883817, 127.0364369426921,"11:28"],
-			[37.26350720342044, 127.03627601016139,"11:29"],
-			[37.26373774644564, 127.03641548502134,"11:30"],
-			[37.264070751791664, 127.03653350221055,"11:31"],
-			[37.2641646761102, 127.0365549598813,"11:32"],
-			[37.26430129309171, 127.03667297707051,"11:33"],
-			[37.26440375566519, 127.03670516357663,"11:34"],
-			[37.26433544729834, 127.03664079056436,"11:35"],
-			[37.26474529656996, 127.03683390960123,"11:36"],
-			[37.26518075899953, 127.03699484212858,"11:37"],
-			[37.26559914207757, 127.0371450458239,"11:38"],
-			[37.265710141279556, 127.03716650349465,"11:39"],
-			[37.26582967869871, 127.03724160534232,"11:40"],
-			[37.265923600823534, 127.03718796116542,"11:41"],
-			[37.26600044611122, 127.03696265562243,"11:42"],
-			[37.26608582967226, 127.03667297706714,"11:43"],
-			[37.266179751477594, 127.03625455248726,"11:44"],
-			[37.266128521416476, 127.03642621385337,"11:45"],
-			[37.266205366495065, 127.03613653529808,"11:46"],
-			[37.266256596503894, 127.03583612790742,"11:47"],
-			[37.26631636480347, 127.03573956838898,"11:48"],
-			[37.26636759473679, 127.03547134750444,"11:49"],
-			[37.266384671373494, 127.03532114380913,"11:50"],
-			[37.26644443957139, 127.03510656710151,"11:51"],
-			[37.266478592806074, 127.03480615971081,"11:52"],
-			[37.26649566941758, 127.03480615971081,"11:53"],
-			[37.26655543752742, 127.03466668485086,"11:54"],
-			[37.266478592806074, 127.0346023118386,"11:55"],
-			[37.26636759473679, 127.03443065047249,"11:56"],
-		];
-
-		// 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
-		var linePath = [];
-
-		for(var i = 0;i<gpsdata.length;i++){
-			linePath.push(new kakao.maps.LatLng(gpsdata[i][0], gpsdata[i][1]));
-		}
-
-		// 지도에 표시할 선을 생성합니다
-		var polyline = new kakao.maps.Polyline({
-			path: linePath, // 선을 구성하는 좌표배열 입니다
-			strokeWeight: 2, // 선의 두께 입니다
-			strokeColor: '#fb7c01', // 선의 색깔입니다
-			strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-			strokeStyle: 'solid' // 선의 스타일입니다
-		});
-
-		// 지도에 선을 표시합니다 
-		polyline.setMap(map);  
-
-		//이동경로 점 표시
-		var markers = [];
-
-		for(var i = 0;i<gpsdata.length;i++){
-			// 지도에 마커를 생성하고 표시한다
-			var imageSrc = "ex.png", // 마커이미지의 주소입니다    
-				imageSize = new kakao.maps.Size(7, 7), // 마커이미지의 크기입니다
-				imageOption = {offset: new kakao.maps.Point(3, 3)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-				
-			// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-			var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-				markerPosition = new kakao.maps.LatLng(0, 0); // 마커가 표시될 위치입니다
-
-			// 마커를 생성하고 지도에 표시합니다
-			var marker = new kakao.maps.Marker({
-				map: map,
-				image: markerImage, // 마커이미지 설정 
-				position: new kakao.maps.LatLng(gpsdata[i][0], gpsdata[i][1])
-			});
-			
-			// 인포윈도우를 생성합니다
-			var infowindow = new kakao.maps.InfoWindow({ 
-				content : gpsdata[i][2] 
-			});
-			
-			// 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
-			markers.push(marker);
-
-			// 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-			// 이벤트 리스너로는 클로저를 만들어 등록합니다 
-			// for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-			kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-			kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-		}
-
-		// 클러스터러에 마커들을 추가합니다
-        clusterer.addMarkers(markers);
-
 		var time = 10000; //1초(1000) * 60
         setInterval("autoScript()", time);
 
@@ -346,10 +217,20 @@
                 let seconds = today.getSeconds();  // 초
                 let milliseconds = today.getMilliseconds(); // 밀리초
 
-                console.log(hours + ':' + minutes + ':' + seconds + ':' + milliseconds);
-                console.log('latitude',latitude);
-                console.log('longitude',longitude);
 
+				// 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
+				var linePath = [];
+
+				linePath.push(new kakao.maps.LatLng(latitude, longitude));
+
+				// 지도에 표시할 선을 생성합니다
+				var polyline = new kakao.maps.Polyline({
+					path: linePath, // 선을 구성하는 좌표배열 입니다
+					strokeWeight: 2, // 선의 두께 입니다
+					strokeColor: '#fb7c01', // 선의 색깔입니다
+					strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+					strokeStyle: 'solid' // 선의 스타일입니다
+				});
 
 				var markers = [];
 
@@ -357,37 +238,37 @@
 				imageSize = new kakao.maps.Size(7, 7), // 마커이미지의 크기입니다
 				imageOption = {offset: new kakao.maps.Point(3, 3)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 				
-			// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-			var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-				markerPosition = new kakao.maps.LatLng(0, 0); // 마커가 표시될 위치입니다
+				// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+				var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+					markerPosition = new kakao.maps.LatLng(0, 0); // 마커가 표시될 위치입니다
 
-			// 마커를 생성하고 지도에 표시합니다
-			var marker = new kakao.maps.Marker({
-				map: map,
-				image: markerImage, // 마커이미지 설정 
-				position: new kakao.maps.LatLng(latitude, longitude)
-			});
-			
-			// 인포윈도우를 생성합니다
-			var infowindow = new kakao.maps.InfoWindow({ 
-				content : hours + ':' + minutes + ':' + seconds + ':' + milliseconds
-			});
-			
-			// 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
-			markers.push(marker);
+				// 마커를 생성하고 지도에 표시합니다
+				var marker = new kakao.maps.Marker({
+					map: map,
+					image: markerImage, // 마커이미지 설정 
+					position: new kakao.maps.LatLng(latitude, longitude)
+				});
+				
+				// 인포윈도우를 생성합니다
+				var infowindow = new kakao.maps.InfoWindow({ 
+					content : hours + ':' + minutes + ':' + seconds + ':' + milliseconds
+				});
+				
+				// 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
+				markers.push(marker);
 
-			// 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-			// 이벤트 리스너로는 클로저를 만들어 등록합니다 
-			// for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-			kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-			kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+				// 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+				// 이벤트 리스너로는 클로저를 만들어 등록합니다 
+				// for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+				kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+				kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
 
-			// 클러스터러에 마커들을 추가합니다
-			clusterer.addMarkers(markers);
+				// 클러스터러에 마커들을 추가합니다
+				clusterer.addMarkers(markers);
 
-            },(err) => {
-                
-            });
+				},(err) => {
+					
+				});
         }
 
 	</script>
